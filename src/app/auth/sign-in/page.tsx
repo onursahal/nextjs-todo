@@ -3,6 +3,7 @@
 import { FaFacebook, FaGoogle, FaTwitter } from "react-icons/fa";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { ChangeEvent, useState } from "react";
+import app from "@/firebase/config";
 
 const SignIn = () => {
   const [user, setUser] = useState({
@@ -10,14 +11,7 @@ const SignIn = () => {
     password: "",
   });
 
-  const auth = getAuth({
-  apiKey: "AIzaSyACSoZwts5MC8LLrDq9iEMVESKOah4Wgk4",
-  authDomain: "nextjs-todo-14234.firebaseapp.com",
-  projectId: "nextjs-todo-14234",
-  storageBucket: "nextjs-todo-14234.appspot.com",
-  messagingSenderId: "1004229858373",
-  appId: "1:1004229858373:web:ac3f9429394daad548ff2c",
-});
+  const auth = getAuth(app);
 
   const signIn = () => {
     signInWithEmailAndPassword(auth, user.email, user.password)
