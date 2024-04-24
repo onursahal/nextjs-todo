@@ -1,29 +1,27 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaFacebook, FaGoogle, FaTwitter } from "react-icons/fa";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { ChangeEvent, useState } from "react";
 import app from "@/firebase/config";
+import { Loader } from "@/components";
+import { signIn } from "@/firebase/auth";
 
 const SignIn = () => {
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
-  const auth = getAuth(app);
-
-  const signIn = () => {
-    signInWithEmailAndPassword(auth, user.email, user.password)
-      .then((userCredential) => {
-        const responseUser = userCredential.user;
-        console.log(console.log(responseUser));
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+  const signInUser = async () => {
+    setLoading(true);
+    await signIn(user);
+    setLoading(false);
   };
+
   const handleUserState = (e: ChangeEvent<HTMLInputElement>, type: string) => {
     setUser((prev) => ({
       ...prev,
@@ -33,7 +31,7 @@ const SignIn = () => {
 
   return (
     <div className="h-screen w-screen flex place-items-center justify-center ">
-      <div className="w-80  border-white border rounded-md flex-row space-y-7 p-4">
+      <div className="  border-white border rounded-md flex flex-col space-y-7 p-4">
         <div id="sign-in-title" className="text-2xl">
           Sign-in
           <div className="w-1/2 border border-white mt-1" />
@@ -60,14 +58,14 @@ const SignIn = () => {
         </div>
         <button
           className="w-full bg-white text-black rounded-sm p-2"
-          onClick={() => signIn()}
+          onClick={signInUser}
         >
-          Log in
+          {loading ? <Loader /> : "Log in"}
         </button>
-        <button className="flex place-items-center justify-center">
+        <div className="flex place-items-center justify-center self-center">
           <div className="w-10 border border-white h-0 mr-4" /> Or Continue With
           <div className="w-10 border border-white h-0 ml-4" />
-        </button>
+        </div>
         <div className="flex justify-center space-x-5">
           <button>
             <FaGoogle size={32} />
@@ -79,6 +77,13 @@ const SignIn = () => {
             <FaTwitter size={32} />
           </button>
         </div>
+        <div className="">
+          Don't have an account yet?{" "}
+          <Link href="/auth/sign-up" className="font-bold">
+            Sign Up now
+          </Link>
+        </div>
+        {/* <button onClick={signOutUser}>Sign out</button> */}
       </div>
     </div>
   );

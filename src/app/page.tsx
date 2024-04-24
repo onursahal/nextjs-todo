@@ -1,8 +1,16 @@
-import { redirect } from "next/navigation"
+"use client";
+
+import { checkUser } from "@/firebase/auth";
+import { useRouter } from "next/navigation";
+import { useLayoutEffect } from "react";
 
 const Home = () => {
-  
-  return redirect("/auth/sign-in");
+  const router = useRouter();
+  useLayoutEffect(() => {
+    checkUser(router);
+  }, []);
+
+  // return redirect("/auth/sign-in");
 };
 
 export default Home;
