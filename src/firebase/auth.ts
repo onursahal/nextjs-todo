@@ -63,13 +63,13 @@ export const checkUser = (router: AppRouterInstance) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
-      router.push("/main/todo-board");
+      router.push("/todo-board");
 
       // ...
     } else {
       // User is signed out
 
-      router.push("/auth/sign-in");
+      router.push("/sign-in");
       // ...
     }
   });
