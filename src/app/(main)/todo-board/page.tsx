@@ -3,7 +3,7 @@
 import { signOut } from "@/firebase/auth";
 import { useRouter } from "next/navigation";
 import TodoBoardCard from "./TodoBoardCard";
-import { todoListsMock } from "@/mock/todolists.mock";
+import { todoListsMock } from "@/mock/todos.mock";
 
 const TodoBoard = () => {
   const router = useRouter();
@@ -15,17 +15,23 @@ const TodoBoard = () => {
   };
 
   const renderTodoBoardCards = () => {
-    return response.map((item) => (
-      <TodoBoardCard cardTitle={item.title} cardDesc={item?.desc} />
-    ));
+    return response.map((item) => {
+      return (
+        <TodoBoardCard
+          cardTitle={item.title}
+          cardDesc={item?.desc}
+          onClick={() => router.push(`/todo-list/${item.id}`)}
+        />
+      );
+    });
   };
   return (
-    <div className="flex flex-col p-20">
+    <>
       <div className="text-2xl font-bold">TodoBoard</div>
       <div className="w-full border border-white my-5" />
       <div className="flex gap-4 flex-wrap">{renderTodoBoardCards()}</div>
       {/* <button onClick={signOutUser}>Sign Out</button> */}
-    </div>
+    </>
   );
 };
 
