@@ -2,7 +2,7 @@
 
 import { todoListMock } from "@/mock/todos.mock";
 import TodoListItem from "./TodoListItem";
-import { FaRegArrowAltCircleUp } from "react-icons/fa";
+import { CiCircleChevUp } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTodo } from "@/store/slices/todoSlice";
@@ -42,7 +42,7 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
           onChange={(e) => setTodoInput(e.target.value)}
         />
         <button>
-          <FaRegArrowAltCircleUp
+          <CiCircleChevUp
             size={24}
             className={`absolute right-3 top-3 ${
               todoInput ? "text-white" : "text-gray-500"
