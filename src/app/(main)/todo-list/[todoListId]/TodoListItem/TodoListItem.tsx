@@ -10,20 +10,20 @@ interface TodoListItemProps {
   todo: string;
   deleteTodo: () => void;
   editTodo: () => void;
-  checked?: boolean;
+  done?: boolean;
 }
 
 const TodoListItem: FC<TodoListItemProps> = ({
   todo,
   deleteTodo,
   editTodo,
-  checked,
+  done,
 }) => {
   return (
     <div className="flex justify-between place-items-center border border-white rounded-md px-4 py-2">
       <div className="flex gap-x-2">
         <button>
-          {checked ? <FaRegCheckCircle size={24} /> : <FaRegCircle size={24} />}
+          {done ? <FaRegCheckCircle size={24} /> : <FaRegCircle size={24} />}
         </button>
         {todo}
       </div>

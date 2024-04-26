@@ -3,27 +3,35 @@
 import { todoListMock } from "@/mock/todos.mock";
 import TodoListItem from "./TodoListItem";
 import { FaRegArrowAltCircleUp } from "react-icons/fa";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchTodo } from "@/store/slices/todoSlice";
 const TodoList = ({ params }: { params: { todoListId: string } }) => {
+  const dispatch = useAppDispatch();
+  const todoList = useAppSelector((state) => state.todo);
+
   const [todoInput, setTodoInput] = useState("");
-  const todoListResponse = todoListMock;
 
   const renderTodoList = () => {
-    return todoListResponse.todos.map((item) => (
+    return todoList.data?.todos.map((item) => (
       <TodoListItem
         todo={item.todo}
         editTodo={() => null}
         deleteTodo={() => null}
+        done={item.done}
       />
     ));
   };
 
+  useEffect(() => {
+    dispatch(fetchTodo(params.todoListId));
+  }, []);
+
   return (
     <div className="flex flex-col justify-between h-full">
       <div>
-        <div className="text-2xl font-bold">{todoListResponse.title}</div>
-        <div className="text-lg my-5">{todoListMock.desc}</div>
+        <div className="text-2xl font-bold">{todoList.data?.title}</div>
+        <div className="text-lg my-5">{todoList.data?.desc}</div>
         <div className="w-full border border-white my-5" />
         <div className="flex flex-col gap-4">{renderTodoList()}</div>
       </div>

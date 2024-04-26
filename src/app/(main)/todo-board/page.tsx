@@ -3,28 +3,41 @@
 import { signOut } from "@/firebase/auth";
 import { useRouter } from "next/navigation";
 import TodoBoardCard from "./TodoBoardCard";
-import { todoListsMock } from "@/mock/todos.mock";
+
+import { useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { fetchTodos } from "@/store/slices/todosSlice";
 
 const TodoBoard = () => {
   const router = useRouter();
-  const response = todoListsMock;
+  const dispatch = useAppDispatch();
 
-  const signOutUser = async () => {
-    const isSignedOut = await signOut();
-    return isSignedOut ? router.push("/") : null;
-  };
+  const todos = useAppSelector((state) => state.todos);
 
   const renderTodoBoardCards = () => {
-    return response.map((item) => {
+    return todos.data?.map((item) => {
       return (
         <TodoBoardCard
           cardTitle={item.title}
           cardDesc={item?.desc}
-          onClick={() => router.push(`/todo-list/${item.id}`)}
+          onClick={() => router.push(`/todo-list/${item.docId}`)}
         />
       );
     });
   };
+
+  useEffect(() => {
+    dispatch(fetchTodos());
+  }, []);
+
+  // const signOutUser = async () => {
+  //   const isSignedOut = await signOut();
+  //   return isSignedOut ? router.push("/") : null;
+  // };
+  if (todos.status !== "succeeded") {
+    return <div>loading... </div>;
+  }
+
   return (
     <>
       <div className="text-2xl font-bold">TodoBoard</div>
