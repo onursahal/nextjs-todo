@@ -8,7 +8,7 @@ const MainLayout = ({
   params: any;
 }) => {
   console.log({ params });
-  return <div className="flex flex-col p-20">{children}</div>;
+  return <div className="flex flex-col p-20 h-screen">{children}</div>;
 };
 
 export default MainLayout;
