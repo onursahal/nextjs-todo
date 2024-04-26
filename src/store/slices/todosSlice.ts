@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "@/firebase/fireStore";
 import { CommonResponseType, TodoType } from "../types";
 import { RootState } from "../store";
@@ -17,6 +17,40 @@ export const fetchTodos = createAsyncThunk<
     throw error;
   }
 });
+
+const emptyTodos: TodoType = {
+  docId: "",
+  title: "",
+  todos: [],
+};
+
+export const postTodos = async ({
+  title,
+  desc,
+}: {
+  title: string;
+  desc?: string;
+}) => {
+  try {
+    const querySnapshot = await addDoc(collection(db, "todos"), {
+      ...emptyTodos,
+      title,
+      desc,
+    });
+    try {
+      return await setDoc(doc(db, "todos", querySnapshot.id), {
+        ...emptyTodos,
+        title,
+        desc,
+        docId: querySnapshot.id,
+      });
+    } catch (error) {
+      throw error;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
 
 interface TodosStateType extends CommonResponseType {
   data?: TodoType[];

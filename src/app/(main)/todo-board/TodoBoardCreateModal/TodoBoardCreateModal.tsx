@@ -4,12 +4,16 @@ interface TodoBoardCreateModalProps {
   show: boolean;
   onCreate: () => void;
   onCancel: () => void;
+  title: (val: string) => void;
+  desc: (val: string) => void;
 }
 
 const TodoBoardCreateModal: FC<TodoBoardCreateModalProps> = ({
   show,
   onCreate,
   onCancel,
+  title,
+  desc,
 }) => {
   if (!show) {
     return;
@@ -22,11 +26,15 @@ const TodoBoardCreateModal: FC<TodoBoardCreateModalProps> = ({
         <div className="w-full border border-white my-2" />
         <div className="flex flex-col gap-2">
           <div>Title</div>
-          <input className="w-full bg-transparent border border-white rounded-md text-md px-2 py-1" />
+          <input
+            className="w-full bg-transparent border border-white rounded-md text-md px-2 py-1"
+            onChange={(e) => title(e.target.value)}
+          />
           <div>Description</div>
           <textarea
             rows={4}
             className="w-full bg-transparent border border-white rounded-md text-md px-2 py-1 resize-none"
+            onChange={(e) => desc(e.target.value)}
           />
         </div>
         <div className="flex gap-2 self-end">

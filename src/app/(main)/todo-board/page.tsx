@@ -6,7 +6,7 @@ import TodoBoardCard from "./TodoBoardCard";
 
 import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { fetchTodos } from "@/store/slices/todosSlice";
+import { fetchTodos, postTodos } from "@/store/slices/todosSlice";
 import TodoBoardCreateModal from "./TodoBoardCreateModal";
 
 const TodoBoard = () => {
@@ -15,6 +15,7 @@ const TodoBoard = () => {
   const dispatch = useAppDispatch();
   const todos = useAppSelector((state) => state.todos);
   const [openModal, setOpenModal] = useState(false);
+  const [newTodos, setNewTodos] = useState({ title: "", desc: "" });
 
   const renderTodoBoardCards = () => {
     return todos.data?.map((item) => {
@@ -50,7 +51,11 @@ const TodoBoard = () => {
       </div>
       <TodoBoardCreateModal
         onCancel={() => setOpenModal(false)}
-        onCreate={() => null}
+        onCreate={() =>
+          console.log(postTodos({ title: newTodos.title, desc: newTodos.desc }))
+        }
+        title={(val) => setNewTodos((prev) => ({ ...prev, title: val }))}
+        desc={(val) => setNewTodos((prev) => ({ ...prev, desc: val }))}
         show={openModal}
       />
       {/* <button onClick={signOutUser}>Sign Out</button> */}
