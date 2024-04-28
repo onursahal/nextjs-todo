@@ -24,13 +24,11 @@ const emptyTodos: TodoType = {
   todos: [],
 };
 
-export const postTodos = async ({
-  title,
-  desc,
-}: {
-  title: string;
-  desc?: string;
-}) => {
+export const postTodos = createAsyncThunk<
+  string,
+  { title: string; desc: string },
+  { state: RootState }
+>("todos/postTodos", async ({ title, desc }) => {
   try {
     const querySnapshot = await addDoc(collection(db, "todos"), {
       ...emptyTodos,
@@ -38,19 +36,20 @@ export const postTodos = async ({
       desc,
     });
     try {
-      return await setDoc(doc(db, "todos", querySnapshot.id), {
+      setDoc(doc(db, "todos", querySnapshot.id), {
         ...emptyTodos,
         title,
         desc,
         docId: querySnapshot.id,
       });
+      return "set doc operation successfull";
     } catch (error) {
       throw error;
     }
   } catch (error) {
     throw error;
   }
-};
+});
 
 interface TodosStateType extends CommonResponseType {
   data?: TodoType[];
@@ -75,6 +74,16 @@ const todosSlice = createSlice({
         state.data = action.payload as TodoType[];
       })
       .addCase(fetchTodos.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(postTodos.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(postTodos.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
+      .addCase(postTodos.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

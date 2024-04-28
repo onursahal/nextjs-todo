@@ -1,15 +1,12 @@
 "use client";
-
-import { signOut } from "@/firebase/auth";
 import { useRouter } from "next/navigation";
 import TodoBoardCard from "./TodoBoardCard";
-
 import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { fetchTodos, postTodos } from "@/store/slices/todosSlice";
 import TodoBoardCreateModal from "./TodoBoardCreateModal";
 
-const TodoBoard = () => {
+export const TodoBoard = () => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
@@ -40,9 +37,9 @@ const TodoBoard = () => {
   //   const isSignedOut = await signOut();
   //   return isSignedOut ? router.push("/") : null;
   // };
-  // if (todos.status !== "succeeded") {
-  //   return <div>loading... </div>;
-  // }
+  if (todos.status !== "succeeded") {
+    return <div>loading... </div>;
+  }
 
   return (
     <>
@@ -66,5 +63,3 @@ const TodoBoard = () => {
     </>
   );
 };
-
-export default TodoBoard;

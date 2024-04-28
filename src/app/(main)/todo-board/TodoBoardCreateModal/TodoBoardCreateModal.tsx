@@ -1,8 +1,10 @@
+import { Loader } from "@/components";
 import { FC } from "react";
 
 interface TodoBoardCreateModalProps {
   show: boolean;
   onCreate: () => void;
+  createLoading?: boolean;
   onCancel: () => void;
   title: (val: string) => void;
   desc: (val: string) => void;
@@ -11,6 +13,7 @@ interface TodoBoardCreateModalProps {
 const TodoBoardCreateModal: FC<TodoBoardCreateModalProps> = ({
   show,
   onCreate,
+  createLoading,
   onCancel,
   title,
   desc,
@@ -42,7 +45,7 @@ const TodoBoardCreateModal: FC<TodoBoardCreateModalProps> = ({
             className="border border-white rounded-md px-2 py-1 mt-4"
             onClick={onCreate}
           >
-            Create
+            {createLoading ? <Loader /> : "Create"}
           </button>
           <button
             className="border border-white rounded-md px-2 py-1 mt-4"
