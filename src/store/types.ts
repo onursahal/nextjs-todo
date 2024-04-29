@@ -13,6 +13,7 @@ export type TodoType = {
 };
 
 export interface CommonResponseType {
-  status: "idle" | "loading" | "succeeded" | "failed";
+  getTodoListStatus: "idle" | "loading" | "succeeded" | "failed";
+  postTodoListStatus: "idle" | "loading" | "succeeded" | "failed";
   error?: string;
 }

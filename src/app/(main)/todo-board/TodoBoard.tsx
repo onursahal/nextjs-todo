@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import TodoBoardCard from "./TodoBoardCard";
 import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { fetchTodos, postTodos } from "@/store/slices/todosSlice";
+import { fetchTodos, postTodos } from "@/store/slices/todos/todoListSlice";
 import TodoBoardCreateModal from "./TodoBoardCreateModal";
 
 export const TodoBoard = () => {
