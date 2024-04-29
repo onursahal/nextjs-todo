@@ -1,9 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 import { CommonResponseType, TodoType } from "../../types";
 import { RootState } from "../../store";
 import {
   getSingleTodoList,
   getTodoLists,
+  postTodo,
   postTodoList,
 } from "./todoListThunks";
 
@@ -19,7 +20,9 @@ const todosInitialState: TodosStateType = {
 const todosSlice = createSlice({
   name: "todos",
   initialState: todosInitialState,
-  reducers: {},
+  reducers: {
+    setInitialState: () => todosInitialState,
+  },
   extraReducers: (builder) => {
     builder
       // getTodoLists
@@ -28,7 +31,9 @@ const todosSlice = createSlice({
       })
       .addCase(getTodoLists.fulfilled, (state, action) => {
         state.getTodoListStatus = "succeeded";
-        state.data = action.payload;
+        state.data = action.payload.sort(
+          (a, b) => b.createdAt?.toMillis() - a.createdAt?.toMillis()
+        );
       })
       .addCase(getTodoLists.rejected, (state, action) => {
         state.getTodoListStatus = "failed";
@@ -56,10 +61,22 @@ const todosSlice = createSlice({
       .addCase(getSingleTodoList.rejected, (state, action) => {
         state.getTodoListStatus = "failed";
         state.error = action.error.message;
+      })
+      // postTodo
+      .addCase(postTodo.pending, (state) => {
+        state.postTodoListStatus = "loading";
+      })
+      .addCase(postTodo.fulfilled, (state) => {
+        state.postTodoListStatus = "succeeded";
+      })
+      .addCase(postTodo.rejected, (state, action) => {
+        state.postTodoListStatus = "failed";
+        state.error = action.error.message;
       });
   },
 });
 
+export const { setInitialState } = todosSlice.actions;
 export const selectTodos = (state: RootState) => state.todos.data;
 
 export default todosSlice.reducer;

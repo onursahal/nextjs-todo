@@ -5,7 +5,6 @@ export const makeStore = () =>
   configureStore({
     reducer: {
       todos: todosReducer,
-      //  user: userReducer,
     },
   });
 

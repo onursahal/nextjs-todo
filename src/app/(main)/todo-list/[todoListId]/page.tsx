@@ -5,15 +5,22 @@ import TodoListItem from "./TodoListItem";
 import { CiCircleChevUp } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchTodo } from "@/store/slices/todoSlice";
+import { TodoType } from "@/store/types";
+import {
+  getSingleTodoList,
+  postTodo,
+} from "@/store/slices/todos/todoListThunks";
+import { setInitialState } from "@/store/slices/todos/todoListSlice";
+
 const TodoList = ({ params }: { params: { todoListId: string } }) => {
   const dispatch = useAppDispatch();
-  const todoList = useAppSelector((state) => state.todo);
+  const todoList = useAppSelector((state) => state.todos);
+  const todoListData = todoList.data as TodoType;
 
   const [todoInput, setTodoInput] = useState("");
 
   const renderTodoList = () => {
-    return todoList.data?.todos.map((item) => (
+    return todoListData?.todos?.map((item) => (
       <TodoListItem
         todo={item.todo}
         editTodo={() => null}
@@ -23,15 +30,43 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
     ));
   };
 
+  const handleOnClick = () => {
+    dispatch(postTodo({ docId: params.todoListId, todo: todoInput }));
+  };
+
   useEffect(() => {
-    dispatch(fetchTodo(params.todoListId));
+    dispatch(getSingleTodoList(params.todoListId));
   }, []);
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      console.log("todoInput", todoInput);
+      if (event.keyCode === 13) {
+        handleOnClick();
+      }
+    };
+
+    document.addEventListener("keypress", handleKeyPress);
+
+    return () => {
+      // Todo: Check why this method not working correctly.
+      //   dispatch(setInitialState());
+      document.removeEventListener("keypress", handleKeyPress);
+    };
+  }, [todoInput]);
+
+  useEffect(() => {
+    if (todoList.postTodoListStatus === "succeeded") {
+      dispatch(getSingleTodoList(params.todoListId));
+      setTodoInput("");
+    }
+  }, [todoList.postTodoListStatus]);
 
   return (
     <div className="flex flex-col justify-between h-full">
       <div>
-        <div className="text-2xl font-bold">{todoList.data?.title}</div>
-        <div className="text-lg my-5">{todoList.data?.desc}</div>
+        <div className="text-2xl font-bold">{todoListData?.title}</div>
+        <div className="text-lg my-5">{todoListData?.desc}</div>
         <div className="w-full border border-white my-5" />
         <div className="flex flex-col gap-4">{renderTodoList()}</div>
       </div>
@@ -39,9 +74,10 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
         <input
           className="w-full bg-transparent border border-white rounded-md text-lg px-4 py-2"
           placeholder="Start writing your todo and smash the enter key..."
+          value={todoInput}
           onChange={(e) => setTodoInput(e.target.value)}
         />
-        <button>
+        <button onClick={handleOnClick}>
           <CiCircleChevUp
             size={24}
             className={`absolute right-3 top-3 ${

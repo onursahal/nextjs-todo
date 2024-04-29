@@ -12,17 +12,19 @@ import {
   postTodoList,
   getTodoLists,
 } from "@/store/slices/todos/todoListThunks";
+import { setInitialState } from "@/store/slices/todos/todoListSlice";
 
 const TodoBoard = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const todos = useAppSelector((state) => state.todos);
+  const todoLists = useAppSelector((state) => state.todos);
+  const todoListsData = todoLists?.data as TodoType[] | undefined;
 
   const [openModal, setOpenModal] = useState(false);
   const [newTodos, setNewTodos] = useState({ title: "", desc: "" });
 
   const renderTodoBoardCards = () => {
-    return (todos.data as TodoType[])?.map((item) => {
+    return todoListsData?.map?.((item) => {
       return (
         <TodoBoardCard
           cardTitle={item.title}
@@ -35,16 +37,21 @@ const TodoBoard = () => {
 
   useEffect(() => {
     dispatch(getTodoLists());
+
+    // Todo: Check why this method not working correctly.
+    // return () => {
+    //   dispatch(setInitialState());
+    // };
   }, []);
 
   useEffect(() => {
-    if (todos.postTodoListStatus === "succeeded") {
+    if (todoLists.postTodoListStatus === "succeeded") {
       dispatch(getTodoLists());
       setOpenModal(false);
     }
-  }, [todos.postTodoListStatus]);
+  }, [todoLists.postTodoListStatus]);
 
-  if (todos.getTodoListStatus !== "succeeded") {
+  if (todoLists.getTodoListStatus !== "succeeded") {
     return <div>loading... </div>;
   }
 
@@ -57,11 +64,13 @@ const TodoBoard = () => {
         <TodoBoardCard createButton onClick={() => setOpenModal(true)} />
       </div>
       <TodoBoardCreateModal
-        onCancel={() => setOpenModal(false)}
+        onCancel={() => {
+          setOpenModal(false);
+        }}
         onCreate={() =>
           dispatch(postTodoList({ title: newTodos.title, desc: newTodos.desc }))
         }
-        createLoading={todos.postTodoListStatus === "loading"}
+        createLoading={todoLists.postTodoListStatus === "loading"}
         title={(val) => setNewTodos((prev) => ({ ...prev, title: val }))}
         desc={(val) => setNewTodos((prev) => ({ ...prev, desc: val }))}
         show={openModal}
