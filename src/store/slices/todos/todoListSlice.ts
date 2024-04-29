@@ -8,11 +8,10 @@ import {
 } from "./todoListThunks";
 
 interface TodosStateType extends CommonResponseType {
-  data?: TodoType[];
+  data?: TodoType[] | TodoType;
 }
 
 const todosInitialState: TodosStateType = {
-  data: [],
   getTodoListStatus: "idle",
   postTodoListStatus: "idle",
 };
@@ -23,17 +22,19 @@ const todosSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // getTodoLists
       .addCase(getTodoLists.pending, (state) => {
         state.getTodoListStatus = "loading";
       })
       .addCase(getTodoLists.fulfilled, (state, action) => {
         state.getTodoListStatus = "succeeded";
-        state.data = action.payload as TodoType[];
+        state.data = action.payload;
       })
       .addCase(getTodoLists.rejected, (state, action) => {
         state.getTodoListStatus = "failed";
         state.error = action.error.message;
       })
+      // postTodoList
       .addCase(postTodoList.pending, (state) => {
         state.postTodoListStatus = "loading";
       })
@@ -44,15 +45,17 @@ const todosSlice = createSlice({
         state.postTodoListStatus = "failed";
         state.error = action.error.message;
       })
+      // getSingleTodoList
       .addCase(getSingleTodoList.pending, (state) => {
         state.getTodoListStatus = "loading";
       })
       .addCase(getSingleTodoList.fulfilled, (state, action) => {
         state.getTodoListStatus = "succeeded";
-        state.error = action.payload.todos;
+        state.data = action.payload;
       })
-      .addCase(getSingleTodoList.pending, (state) => {
-        state.getTodoListStatus = "loading";
+      .addCase(getSingleTodoList.rejected, (state, action) => {
+        state.getTodoListStatus = "failed";
+        state.error = action.error.message;
       });
   },
 });

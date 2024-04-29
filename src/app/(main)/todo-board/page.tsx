@@ -1,24 +1,28 @@
 "use client";
 
-import { signOut } from "@/firebase/auth";
 import { useRouter } from "next/navigation";
-import TodoBoardCard from "./TodoBoardCard";
-
 import { useEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { fetchTodos, postTodos } from "@/store/slices/todos/todoListSlice";
+
+import TodoBoardCard from "./TodoBoardCard";
 import TodoBoardCreateModal from "./TodoBoardCreateModal";
+
+import { TodoType } from "@/store/types";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import {
+  postTodoList,
+  getTodoLists,
+} from "@/store/slices/todos/todoListThunks";
 
 const TodoBoard = () => {
   const router = useRouter();
-
   const dispatch = useAppDispatch();
   const todos = useAppSelector((state) => state.todos);
+
   const [openModal, setOpenModal] = useState(false);
   const [newTodos, setNewTodos] = useState({ title: "", desc: "" });
 
   const renderTodoBoardCards = () => {
-    return todos.data?.map((item) => {
+    return (todos.data as TodoType[])?.map((item) => {
       return (
         <TodoBoardCard
           cardTitle={item.title}
@@ -30,19 +34,19 @@ const TodoBoard = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchTodos());
+    dispatch(getTodoLists());
   }, []);
-  useEffect(() => {
-    console.log(todos);
-  }, [todos]);
 
-  // const signOutUser = async () => {
-  //   const isSignedOut = await signOut();
-  //   return isSignedOut ? router.push("/") : null;
-  // };
-  // if (todos.status !== "succeeded") {
-  //   return <div>loading... </div>;
-  // }
+  useEffect(() => {
+    if (todos.postTodoListStatus === "succeeded") {
+      dispatch(getTodoLists());
+      setOpenModal(false);
+    }
+  }, [todos.postTodoListStatus]);
+
+  if (todos.getTodoListStatus !== "succeeded") {
+    return <div>loading... </div>;
+  }
 
   return (
     <>
@@ -55,14 +59,13 @@ const TodoBoard = () => {
       <TodoBoardCreateModal
         onCancel={() => setOpenModal(false)}
         onCreate={() =>
-          dispatch(postTodos({ title: newTodos.title, desc: newTodos.desc }))
+          dispatch(postTodoList({ title: newTodos.title, desc: newTodos.desc }))
         }
-        createLoading={todos.status === "loading"}
+        createLoading={todos.postTodoListStatus === "loading"}
         title={(val) => setNewTodos((prev) => ({ ...prev, title: val }))}
         desc={(val) => setNewTodos((prev) => ({ ...prev, desc: val }))}
         show={openModal}
       />
-      {/* <button onClick={signOutUser}>Sign Out</button> */}
     </>
   );
 };
