@@ -3,6 +3,8 @@ import { RootState } from "@/store/store";
 import { TodoType } from "@/store/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Timestamp, arrayUnion, updateDoc } from "firebase/firestore";
+import firebase from "firebase/compat/app";
+
 import {
   addDoc,
   collection,
@@ -81,13 +83,63 @@ export const postTodo = createAsyncThunk<
   try {
     await updateDoc(doc(db, "todos", docId), {
       todos: arrayUnion({
-        id: "123",
+        id: crypto.randomUUID(),
         createdAt: Timestamp.now(),
         todo,
         done: false,
       }),
     });
     return "todo added to document which is given id";
+  } catch (error) {
+    throw error;
+  }
+});
+
+export const putTodo = createAsyncThunk<
+  string,
+  { docId: string; todo?: string; done?: boolean; id: string },
+  { state: RootState }
+>("todos/putTodo", async ({ docId, todo, done, id }, { getState }) => {
+  try {
+    const currentTodoList = getState().todos.data as TodoType;
+
+    const newTodos: {
+      id: string;
+      createdAt: firebase.firestore.Timestamp;
+      done: boolean;
+      todo: string;
+    }[] = currentTodoList?.todos.reduce(
+      (
+        acc: {
+          id: string;
+          createdAt: firebase.firestore.Timestamp;
+          done: boolean;
+          todo: string;
+        }[],
+        item
+      ) => {
+        const arr = acc;
+        if (item.id === id) {
+          const newObj = {
+            ...item,
+            ...(!!todo && { todo }),
+            ...(done !== undefined && { done }),
+          };
+          arr.push(newObj);
+        } else {
+          arr.push(item);
+        }
+
+        return arr;
+      },
+      []
+    );
+    console.log("newTodos", newTodos);
+
+    await updateDoc(doc(db, "todos", docId), {
+      todos: newTodos,
+    });
+    return "given todo list's todos updated successfully";
   } catch (error) {
     throw error;
   }

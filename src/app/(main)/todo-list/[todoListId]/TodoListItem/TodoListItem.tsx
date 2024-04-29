@@ -13,6 +13,7 @@ interface TodoListItemProps {
   todo: string;
   deleteTodo: () => void;
   editTodo: () => void;
+  doneTodo: () => void;
   done?: boolean;
 }
 
@@ -20,13 +21,22 @@ const TodoListItem: FC<TodoListItemProps> = ({
   todo,
   deleteTodo,
   editTodo,
+  doneTodo,
   done,
 }) => {
   return (
-    <div className="flex justify-between place-items-center border border-white rounded-md px-4 py-2">
+    <div
+      className={`flex justify-between place-items-center border border-white rounded-md px-4 py-2 ${
+        done && "bg-green-500"
+      }`}
+    >
       <div className="flex gap-x-2">
-        <button>
-          {done ? <CiCircleCheck size={24} /> : <PiCircleLight size={24} />}
+        <button onClick={doneTodo}>
+          {done ? (
+            <CiCircleCheck size={24} className="bg-green-500" />
+          ) : (
+            <PiCircleLight size={24} />
+          )}
         </button>
         {todo}
       </div>

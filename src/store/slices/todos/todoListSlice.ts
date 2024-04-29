@@ -6,6 +6,7 @@ import {
   getTodoLists,
   postTodo,
   postTodoList,
+  putTodo,
 } from "./todoListThunks";
 
 interface TodosStateType extends CommonResponseType {
@@ -70,6 +71,17 @@ const todosSlice = createSlice({
         state.postTodoListStatus = "succeeded";
       })
       .addCase(postTodo.rejected, (state, action) => {
+        state.postTodoListStatus = "failed";
+        state.error = action.error.message;
+      })
+      // putTodo
+      .addCase(putTodo.pending, (state) => {
+        state.postTodoListStatus = "loading";
+      })
+      .addCase(putTodo.fulfilled, (state) => {
+        state.postTodoListStatus = "succeeded";
+      })
+      .addCase(putTodo.rejected, (state, action) => {
         state.postTodoListStatus = "failed";
         state.error = action.error.message;
       });

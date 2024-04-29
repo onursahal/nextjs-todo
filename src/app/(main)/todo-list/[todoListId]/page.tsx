@@ -1,6 +1,5 @@
 "use client";
 
-import { todoListMock } from "@/mock/todos.mock";
 import TodoListItem from "./TodoListItem";
 import { CiCircleChevUp } from "react-icons/ci";
 import { useEffect, useState } from "react";
@@ -9,8 +8,8 @@ import { TodoType } from "@/store/types";
 import {
   getSingleTodoList,
   postTodo,
+  putTodo,
 } from "@/store/slices/todos/todoListThunks";
-import { setInitialState } from "@/store/slices/todos/todoListSlice";
 
 const TodoList = ({ params }: { params: { todoListId: string } }) => {
   const dispatch = useAppDispatch();
@@ -25,6 +24,11 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
         todo={item.todo}
         editTodo={() => null}
         deleteTodo={() => null}
+        doneTodo={() =>
+          dispatch(
+            putTodo({ docId: params.todoListId, done: !item.done, id: item.id })
+          )
+        }
         done={item.done}
       />
     ));
@@ -40,7 +44,6 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      console.log("todoInput", todoInput);
       if (event.keyCode === 13) {
         handleOnClick();
       }
@@ -68,7 +71,9 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
         <div className="text-2xl font-bold">{todoListData?.title}</div>
         <div className="text-lg my-5">{todoListData?.desc}</div>
         <div className="w-full border border-white my-5" />
-        <div className="flex flex-col gap-4">{renderTodoList()}</div>
+        <div className="flex flex-col gap-4 h-[86%] overflow-y-auto">
+          {renderTodoList()}
+        </div>
       </div>
       <div className="flex relative">
         <input
