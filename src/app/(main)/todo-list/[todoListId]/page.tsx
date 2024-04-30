@@ -5,21 +5,22 @@ import { CiCircleChevUp } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { TodoType } from "@/store/features/todos/todosTypes";
-import {
-  getSingleTodoList,
-  postTodo,
-  putTodo,
-} from "@/store/features/todos/todosThunks";
+import { postTodo } from "@/store/features/todos/postTodo";
+import { getSingleTodoList } from "@/store/features/todos/getSingleTodoList";
+import { putTodo } from "@/store/features/todos/putTodo";
 
 const TodoList = ({ params }: { params: { todoListId: string } }) => {
   const dispatch = useAppDispatch();
-  const todoList = useAppSelector((state) => state.todos);
-  const todoListData = todoList.data as TodoType;
+  const getSingleTodoListData = useAppSelector(
+    (state) => state.todos.getSingleTodoList.data
+  );
+  const postTodoStatus = useAppSelector((state) => state.todos.postTodo.status);
+  const putTodoStatus = useAppSelector((state) => state.todos.putTodo.status);
 
   const [todoInput, setTodoInput] = useState("");
 
   const renderTodoList = () => {
-    return todoListData?.todos?.map((item) => (
+    return getSingleTodoListData?.todos?.map((item) => (
       <TodoListItem
         todo={item.todo}
         editTodo={() => null}
@@ -57,17 +58,23 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
   }, [todoInput]);
 
   useEffect(() => {
-    if (todoList.postTodoListStatus === "succeeded") {
+    if (postTodoStatus === "succeeded") {
       dispatch(getSingleTodoList(params.todoListId));
       setTodoInput("");
     }
-  }, [todoList.postTodoListStatus]);
+  }, [postTodoStatus]);
+
+  useEffect(() => {
+    if (putTodoStatus === "succeeded") {
+      dispatch(getSingleTodoList(params.todoListId));
+    }
+  }, [putTodoStatus]);
 
   return (
     <div className="flex flex-col justify-between h-full">
       <div>
-        <div className="text-2xl font-bold">{todoListData?.title}</div>
-        <div className="text-lg my-5">{todoListData?.desc}</div>
+        <div className="text-2xl font-bold">{getSingleTodoListData?.title}</div>
+        <div className="text-lg my-5">{getSingleTodoListData?.desc}</div>
         <div className="w-full border border-white my-5" />
         <div className="flex flex-col gap-4 h-[86%] overflow-y-auto">
           {renderTodoList()}

@@ -8,24 +8,23 @@ import TodoBoardCreateModal from "./TodoBoardCreateModal";
 
 import { TodoType } from "@/store/features/todos/todosTypes";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import {
-  postTodoList,
-  getTodoLists,
-  putTodo,
-} from "@/store/features/todos/todosThunks";
-import { setInitialState } from "@/store/features/todos/todosSlice";
+import { getTodoLists } from "@/store/features/todos/getTodoLists";
+import { postTodoList } from "@/store/features/todos/postTodoList";
 
 const TodoBoard = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const todoLists = useAppSelector((state) => state.todos);
-  const todoListsData = todoLists?.data as TodoType[] | undefined;
+  const postTodoListStatus = useAppSelector((state) => state.todos).postTodoList
+    .status;
+  const { data: getTodoListsData, status: getTodoListsStatus } = useAppSelector(
+    (state) => state.todos.getTodoLists
+  );
 
   const [openModal, setOpenModal] = useState(false);
   const [newTodos, setNewTodos] = useState({ title: "", desc: "" });
 
   const renderTodoBoardCards = () => {
-    return todoListsData?.map?.((item) => {
+    return getTodoListsData?.map?.((item) => {
       return (
         <TodoBoardCard
           cardTitle={item.title}
@@ -46,13 +45,13 @@ const TodoBoard = () => {
   }, []);
 
   useEffect(() => {
-    if (todoLists.postTodoListStatus === "succeeded") {
+    if (postTodoListStatus === "succeeded") {
       dispatch(getTodoLists());
       setOpenModal(false);
     }
-  }, [todoLists.postTodoListStatus]);
+  }, [postTodoListStatus]);
 
-  if (todoLists.getTodoListStatus !== "succeeded") {
+  if (getTodoListsStatus !== "succeeded") {
     return <div>loading... </div>;
   }
 
@@ -71,7 +70,7 @@ const TodoBoard = () => {
         onCreate={() =>
           dispatch(postTodoList({ title: newTodos.title, desc: newTodos.desc }))
         }
-        createLoading={todoLists.postTodoListStatus === "loading"}
+        createLoading={postTodoListStatus === "loading"}
         title={(val) => setNewTodos((prev) => ({ ...prev, title: val }))}
         desc={(val) => setNewTodos((prev) => ({ ...prev, desc: val }))}
         show={openModal}

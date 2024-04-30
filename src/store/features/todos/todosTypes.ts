@@ -1,3 +1,4 @@
+import { CommonResponseType } from "@/store/types";
 import firebase from "firebase/compat/app";
 
 export type TodoType = {
@@ -12,3 +13,8 @@ export type TodoType = {
     done: boolean;
   }[];
 };
+
+export interface TodoStateType<T extends TodoType | TodoType[] = TodoType>
+  extends CommonResponseType {
+  data?: T;
+}
