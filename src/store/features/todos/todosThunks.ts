@@ -1,18 +1,11 @@
 import { db } from "@/firebase/fireStore";
 import { RootState } from "@/store/store";
-import { TodoType } from "@/store/types";
+import { TodoType } from "./todosTypes";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Timestamp, arrayUnion, updateDoc } from "firebase/firestore";
 import firebase from "firebase/compat/app";
 
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 
 const emptyTodos: TodoType = {
   docId: "",

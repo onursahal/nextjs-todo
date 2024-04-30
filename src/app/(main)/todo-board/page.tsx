@@ -6,14 +6,14 @@ import { useEffect, useState } from "react";
 import TodoBoardCard from "./TodoBoardCard";
 import TodoBoardCreateModal from "./TodoBoardCreateModal";
 
-import { TodoType } from "@/store/types";
+import { TodoType } from "@/store/features/todos/todosTypes";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import {
   postTodoList,
   getTodoLists,
   putTodo,
-} from "@/store/slices/todos/todoListThunks";
-import { setInitialState } from "@/store/slices/todos/todoListSlice";
+} from "@/store/features/todos/todosThunks";
+import { setInitialState } from "@/store/features/todos/todosSlice";
 
 const TodoBoard = () => {
   const router = useRouter();

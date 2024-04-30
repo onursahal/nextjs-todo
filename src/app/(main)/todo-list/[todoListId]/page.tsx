@@ -4,12 +4,12 @@ import TodoListItem from "./TodoListItem";
 import { CiCircleChevUp } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { TodoType } from "@/store/types";
+import { TodoType } from "@/store/features/todos/todosTypes";
 import {
   getSingleTodoList,
   postTodo,
   putTodo,
-} from "@/store/slices/todos/todoListThunks";
+} from "@/store/features/todos/todosThunks";
 
 const TodoList = ({ params }: { params: { todoListId: string } }) => {
   const dispatch = useAppDispatch();
@@ -34,7 +34,7 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
     ));
   };
 
-  const handleOnClick = () => {
+  const handleInputSubmitOnClick = () => {
     dispatch(postTodo({ docId: params.todoListId, todo: todoInput }));
   };
 
@@ -45,15 +45,13 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.keyCode === 13) {
-        handleOnClick();
+        handleInputSubmitOnClick();
       }
     };
 
     document.addEventListener("keypress", handleKeyPress);
 
     return () => {
-      // Todo: Check why this method not working correctly.
-      //   dispatch(setInitialState());
       document.removeEventListener("keypress", handleKeyPress);
     };
   }, [todoInput]);
@@ -82,7 +80,7 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
           value={todoInput}
           onChange={(e) => setTodoInput(e.target.value)}
         />
-        <button onClick={handleOnClick}>
+        <button onClick={handleInputSubmitOnClick}>
           <CiCircleChevUp
             size={24}
             className={`absolute right-3 top-3 ${

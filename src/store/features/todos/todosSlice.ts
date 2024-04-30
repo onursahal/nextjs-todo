@@ -1,5 +1,6 @@
-import { createAction, createSlice } from "@reduxjs/toolkit";
-import { CommonResponseType, TodoType } from "../../types";
+import { createSlice } from "@reduxjs/toolkit";
+import { CommonResponseType } from "../../types";
+import { TodoType } from "./todosTypes";
 import { RootState } from "../../store";
 import {
   getSingleTodoList,
@@ -7,7 +8,7 @@ import {
   postTodo,
   postTodoList,
   putTodo,
-} from "./todoListThunks";
+} from "./todosThunks";
 
 interface TodosStateType extends CommonResponseType {
   data?: TodoType[] | TodoType;
