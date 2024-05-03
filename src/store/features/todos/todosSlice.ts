@@ -5,13 +5,15 @@ import getTodoListsSlice from "./getTodoLists";
 import postTodoSlice from "./postTodo";
 import postTodoListSlice from "./postTodoList";
 import putTodoSlice from "./putTodo";
+import deleteTodoSlice from "./deleteTodo";
 
 const todosSlice = combineSlices(
   getSingleTodoListSlice,
   getTodoListsSlice,
   postTodoSlice,
   postTodoListSlice,
-  putTodoSlice
+  putTodoSlice,
+  deleteTodoSlice
 );
 
 export default todosSlice;

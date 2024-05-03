@@ -1,17 +1,11 @@
 import { RootState } from "@/store/store";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  Timestamp,
-  addDoc,
-  collection,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { emptyTodos, singleTodoListInitialState } from "./todosConstants";
 import { db } from "@/firebase/fireStore";
 
 export const postTodoList = createAsyncThunk<
-  string,
+  void,
   { title: string; desc: string },
   { state: RootState }
 >("todos/postTodoList", async ({ title, desc }) => {
@@ -20,13 +14,12 @@ export const postTodoList = createAsyncThunk<
       ...emptyTodos,
       title,
       desc,
-      createdAt: Timestamp.now(),
+      createdAt: new Date().valueOf(),
     });
     try {
       await updateDoc(doc(db, "todos", querySnapshot.id), {
         docId: querySnapshot.id,
       });
-      return "todo list added to collection.";
     } catch (error) {
       throw error;
     }

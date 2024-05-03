@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import TodoBoardCard from "./TodoBoardCard";
 import TodoBoardCreateModal from "./TodoBoardCreateModal";
 
-import { TodoType } from "@/store/features/todos/todosTypes";
+import { TodoListType } from "@/store/features/todos/todosTypes";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { getTodoLists } from "@/store/features/todos/getTodoLists";
 import { postTodoList } from "@/store/features/todos/postTodoList";
@@ -27,6 +27,7 @@ const TodoBoard = () => {
     return getTodoListsData?.map?.((item) => {
       return (
         <TodoBoardCard
+          key={item.docId}
           cardTitle={item.title}
           cardDesc={item?.desc}
           onClick={() => router.push(`/todo-list/${item.docId}`)}

@@ -1,18 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { TodoType } from "./todosTypes";
+import { TodoListType } from "./todosTypes";
 import { RootState } from "@/store/store";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/fireStore";
 import { singleTodoListInitialState } from "./todosConstants";
 
 export const getSingleTodoList = createAsyncThunk<
-  TodoType,
+  TodoListType,
   string,
   { state: RootState }
 >("todos/getSingleTodoList", async (docId: string) => {
   try {
     const querySnapshot = await getDoc(doc(db, "todos", docId));
-    const data = querySnapshot.data() as TodoType;
+    const data = querySnapshot.data() as TodoListType;
     return data;
   } catch (error) {
     throw error;

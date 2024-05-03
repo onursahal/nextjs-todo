@@ -1,17 +1,16 @@
-import { Timestamp } from "firebase/firestore";
-import { TodoType, TodoStateType } from "./todosTypes";
+import { TodoListType, TodoStateType } from "./todosTypes";
 
-export const emptyTodos: TodoType = {
+export const emptyTodos: TodoListType = {
   docId: "",
   todos: [],
   title: "",
   desc: "",
-  createdAt: Timestamp.now(),
+  createdAt: new Date().valueOf(),
 };
 
-export const todoListsInitialState: TodoStateType<TodoType[]> = {
+export const todoListsInitialState: TodoStateType<TodoListType[]> = {
   status: "idle",
 };
-export const singleTodoListInitialState: TodoStateType<TodoType> = {
+export const singleTodoListInitialState: TodoStateType<TodoListType> = {
   status: "idle",
 };

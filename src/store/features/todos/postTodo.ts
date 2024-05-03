@@ -1,24 +1,23 @@
 import { db } from "@/firebase/fireStore";
 import { RootState } from "@/store/store";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Timestamp, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { singleTodoListInitialState } from "./todosConstants";
 
 export const postTodo = createAsyncThunk<
-  string,
-  { docId: string; todo: string },
+  void,
+  { docId: string; todo: string | null | undefined },
   { state: RootState }
 >("todos/postTodo", async ({ docId, todo }) => {
   try {
     await updateDoc(doc(db, "todos", docId), {
       todos: arrayUnion({
         id: crypto.randomUUID(),
-        createdAt: Timestamp.now(),
+        createdAt: new Date().valueOf(),
         todo,
         done: false,
       }),
     });
-    return "todo added to document which is given id";
   } catch (error) {
     throw error;
   }

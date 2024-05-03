@@ -1,34 +1,21 @@
-import firebase from "firebase/compat/app";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/store/store";
-import { TodoType } from "./todosTypes";
+import { TodoListType, TodoType } from "./todosTypes";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/fireStore";
 import { singleTodoListInitialState } from "./todosConstants";
 
 export const putTodo = createAsyncThunk<
-  string,
+  void,
   { docId: string; todo?: string; done?: boolean; id: string },
   { state: RootState }
 >("todos/putTodo", async ({ docId, todo, done, id }, { getState }) => {
   try {
-    const currentTodoList = getState().todos.getSingleTodoList.data as TodoType;
+    const currentTodoList = getState().todos.getSingleTodoList
+      .data as TodoListType;
 
-    const newTodos: {
-      id: string;
-      createdAt: firebase.firestore.Timestamp;
-      done: boolean;
-      todo: string;
-    }[] = currentTodoList?.todos.reduce(
-      (
-        acc: {
-          id: string;
-          createdAt: firebase.firestore.Timestamp;
-          done: boolean;
-          todo: string;
-        }[],
-        item
-      ) => {
+    const newTodos: TodoType[] = currentTodoList?.todos.reduce(
+      (acc: TodoType[], item) => {
         const arr = acc;
         if (item.id === id) {
           const newObj = {
@@ -50,7 +37,6 @@ export const putTodo = createAsyncThunk<
     await updateDoc(doc(db, "todos", docId), {
       todos: newTodos,
     });
-    return "given todo list's todos updated successfully";
   } catch (error) {
     throw error;
   }
