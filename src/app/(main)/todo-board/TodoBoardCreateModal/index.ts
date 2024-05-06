@@ -1,3 +1,3 @@
-import TodoBoardCreateModal from "./TodoBoardCreateModal";
+import TodoBoardCreateModal from "./TodoBoardModal";
 
 export default TodoBoardCreateModal;

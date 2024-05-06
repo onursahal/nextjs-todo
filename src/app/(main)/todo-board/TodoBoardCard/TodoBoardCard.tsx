@@ -1,11 +1,13 @@
 import { FC } from "react";
-import { CiCirclePlus } from "react-icons/ci";
+import { CiCirclePlus, CiEdit, CiTrash } from "react-icons/ci";
 
 interface TodoBoardCardProps {
   cardTitle?: string;
   cardDesc?: string;
   onClick?: () => void;
   createButton?: boolean;
+  editOnClick?: () => void;
+  deleteOnClick?: () => void;
 }
 
 const TodoBoardCard: FC<TodoBoardCardProps> = ({
@@ -13,6 +15,8 @@ const TodoBoardCard: FC<TodoBoardCardProps> = ({
   cardDesc,
   onClick,
   createButton,
+  editOnClick,
+  deleteOnClick,
 }) => {
   return (
     <button
@@ -25,7 +29,27 @@ const TodoBoardCard: FC<TodoBoardCardProps> = ({
         </div>
       ) : (
         <>
-          <div className="text-left font-semibold">{cardTitle}</div>
+          <div className="text-left font-semibold flex justify-between w-full">
+            <div>{cardTitle}</div>
+            <div className="flex gap-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  editOnClick?.();
+                }}
+              >
+                <CiEdit size={24} />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteOnClick?.();
+                }}
+              >
+                <CiTrash size={24} />
+              </button>
+            </div>
+          </div>
           <div className="w-full border border-white my-1" />
           <p className="text-sm line-clamp-5 text-left">{cardDesc}</p>
         </>

@@ -3,20 +3,28 @@ import { FC } from "react";
 
 interface TodoBoardCreateModalProps {
   show: boolean;
-  onCreate: () => void;
-  createLoading?: boolean;
+  onAction: () => void;
+  actionLoading?: boolean;
   onCancel: () => void;
-  title: (val: string) => void;
-  desc: (val: string) => void;
+  titleOnChange: (val: string) => void;
+  titleDefaultVal?: string;
+  descOnChange: (val: string) => void;
+  descDefaultVal?: string;
+  modalTitle: string;
+  actionButtonText: string;
 }
 
 const TodoBoardCreateModal: FC<TodoBoardCreateModalProps> = ({
   show,
-  onCreate,
-  createLoading,
+  onAction,
+  actionLoading,
   onCancel,
-  title,
-  desc,
+  titleOnChange,
+  titleDefaultVal,
+  descOnChange,
+  descDefaultVal,
+  modalTitle,
+  actionButtonText,
 }) => {
   if (!show) {
     return;
@@ -25,27 +33,29 @@ const TodoBoardCreateModal: FC<TodoBoardCreateModalProps> = ({
   return (
     <div className="absolute p-20 top-0 right-0 h-full w-full z-1 bg-black bg-opacity-80 flex align-middle justify-center">
       <div className="w-1/4 max-h-fit absolute top-60 bg-black rounded-md border border-white p-5 flex flex-col">
-        <div>Create a new to do list</div>
+        <div>{modalTitle}</div>
         <div className="w-full border border-white my-2" />
         <div className="flex flex-col gap-2">
           <div>Title</div>
           <input
             className="w-full bg-transparent border border-white rounded-md text-md px-2 py-1"
-            onChange={(e) => title(e.target.value)}
+            defaultValue={titleDefaultVal}
+            onChange={(e) => titleOnChange(e.target.value)}
           />
           <div>Description</div>
           <textarea
             rows={4}
             className="w-full bg-transparent border border-white rounded-md text-md px-2 py-1 resize-none"
-            onChange={(e) => desc(e.target.value)}
+            defaultValue={descDefaultVal}
+            onChange={(e) => descOnChange(e.target.value)}
           />
         </div>
         <div className="flex gap-2 self-end">
           <button
             className="border border-white rounded-md px-2 py-1 mt-4"
-            onClick={onCreate}
+            onClick={onAction}
           >
-            {createLoading ? <Loader /> : "Create"}
+            {actionLoading ? <Loader /> : actionButtonText}
           </button>
           <button
             className="border border-white rounded-md px-2 py-1 mt-4"
