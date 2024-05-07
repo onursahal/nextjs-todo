@@ -8,6 +8,7 @@ import { postTodo } from "@/store/features/todos/postTodo";
 import { getSingleTodoList } from "@/store/features/todos/getSingleTodoList";
 import { putTodo } from "@/store/features/todos/putTodo";
 import { deleteTodo } from "@/store/features/todos/deleteTodo";
+import { Button } from "@/components";
 
 const TodoList = ({ params }: { params: { todoListId: string } }) => {
   const dispatch = useAppDispatch();
@@ -204,14 +205,17 @@ const TodoList = ({ params }: { params: { todoListId: string } }) => {
           }
           onChange={(e) => setTodoInput(e.target.value)}
         />
-        <button id="submit-todo-button" onClick={handleSubmitRequest}>
+        <Button
+          id="submit-todo-button"
+          intent={todoInput ? "primary" : "transparent"}
+          className="absolute right-[1px]  h-[calc(100%-2px)] top-[1px]"
+          onClick={handleSubmitRequest}
+        >
           <CiCircleChevUp
             size={24}
-            className={`absolute right-3 top-3 ${
-              todoInput ? "text-white" : "text-gray-500"
-            }`}
+            className={`${todoInput ? "text-white" : "text-gray-500"}`}
           />
-        </button>
+        </Button>
       </div>
     </div>
   );

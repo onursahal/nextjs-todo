@@ -1,3 +1,4 @@
+import { Button } from "@/components";
 import { FC, Key, useEffect, useRef } from "react";
 
 import { CiEdit, CiCircleCheck, CiTrash, CiCircleChevUp } from "react-icons/ci";
@@ -38,14 +39,14 @@ const TodoListItem: FC<TodoListItemProps> = ({
         done && "bg-green-500"
       }`}
     >
-      <div className="flex gap-x-2 w-full">
-        <button onClick={doneTodo}>
+      <div className="flex gap-x-2 w-full place-items-center">
+        <Button intent="transparent" onClick={doneTodo}>
           {done ? (
-            <CiCircleCheck size={24} className="bg-green-500" />
+            <CiCircleCheck size={28} className="bg-green-500" />
           ) : (
-            <PiCircleLight size={24} />
+            <PiCircleLight size={28} />
           )}
-        </button>
+        </Button>
         {isEditActive ? (
           <input
             id="todo-item-edit-input"
@@ -66,16 +67,24 @@ const TodoListItem: FC<TodoListItemProps> = ({
         )}
       </div>
       <div className="flex gap-x-4 place-items-center">
-        <button onClick={isEditActive ? onSubmitEdit : editTodo}>
+        <Button
+          intent={done ? "transparent" : "primary"}
+          border={done ? true : false}
+          onClick={isEditActive ? onSubmitEdit : editTodo}
+        >
           {isEditActive ? (
             <CiCircleChevUp size={24} className={`text-white`} />
           ) : (
             <CiEdit size={24} />
           )}
-        </button>
-        <button onClick={deleteTodo}>
+        </Button>
+        <Button
+          intent={done ? "transparent" : "primary"}
+          border={done}
+          onClick={deleteTodo}
+        >
           <CiTrash size={24} />
-        </button>
+        </Button>
       </div>
     </div>
   );

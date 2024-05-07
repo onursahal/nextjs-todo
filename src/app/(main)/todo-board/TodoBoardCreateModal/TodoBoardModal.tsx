@@ -1,4 +1,4 @@
-import { Loader } from "@/components";
+import { Button, Loader } from "@/components";
 import { FC } from "react";
 
 interface TodoBoardCreateModalProps {
@@ -51,18 +51,20 @@ const TodoBoardCreateModal: FC<TodoBoardCreateModalProps> = ({
           />
         </div>
         <div className="flex gap-2 self-end">
-          <button
-            className="border border-white rounded-md px-2 py-1 mt-4"
+          <Button
+            intent="primary"
+            className="px-2 py-1 mt-4"
             onClick={onAction}
           >
             {actionLoading ? <Loader /> : actionButtonText}
-          </button>
-          <button
-            className="border border-white rounded-md px-2 py-1 mt-4"
+          </Button>
+          <Button
+            intent="primary"
+            className="px-2 py-1 mt-4"
             onClick={onCancel}
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </div>
     </div>

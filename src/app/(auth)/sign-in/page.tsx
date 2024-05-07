@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FaFacebook, FaGoogle, FaTwitter } from "react-icons/fa";
 import { ChangeEvent, FC, useState } from "react";
-import { Loader } from "@/components";
+import { Button, Loader } from "@/components";
 import { signIn } from "@/firebase/auth";
 
 const SignIn: FC<{}> = () => {
@@ -52,26 +52,23 @@ const SignIn: FC<{}> = () => {
           onChange={(val) => handleUserState(val, "password")}
         />
       </div>
-      <button
-        className="w-full bg-white text-black rounded-sm p-2"
-        onClick={signInUser}
-      >
+      <Button intent={"primary"} className="w-full" onClick={signInUser}>
         {loading ? <Loader /> : "Log in"}
-      </button>
+      </Button>
       <div className="flex place-items-center justify-center self-center">
         <div className="w-10 border border-white h-0 mr-4" /> Or Continue With
         <div className="w-10 border border-white h-0 ml-4" />
       </div>
       <div className="flex justify-center space-x-5">
-        <button>
+        <Button>
           <FaGoogle size={32} />
-        </button>
-        <button>
+        </Button>
+        <Button>
           <FaFacebook size={32} />
-        </button>
-        <button>
+        </Button>
+        <Button>
           <FaTwitter size={32} />
-        </button>
+        </Button>
       </div>
       <div className="">
         Don't have an account yet?{" "}
@@ -79,7 +76,6 @@ const SignIn: FC<{}> = () => {
           Sign Up now
         </Link>
       </div>
-      {/* <button onClick={signOutUser}>Sign out</button> */}
     </>
   );
 };

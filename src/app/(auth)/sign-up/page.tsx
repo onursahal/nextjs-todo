@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useState } from "react";
-import { Loader } from "@/components";
+import { Button, Loader } from "@/components";
 import { signUp } from "@/firebase/auth";
 
 const SignUp = () => {
@@ -74,12 +74,9 @@ const SignUp = () => {
           onChange={(val) => handleUserState(val, "confirmPassword")}
         />
       </div>
-      <button
-        className="w-full bg-white text-black rounded-sm p-2"
-        onClick={signUpUser}
-      >
+      <Button intent="primary" className="w-full" onClick={signUpUser}>
         {loading ? <Loader /> : "Sign Up"}
-      </button>
+      </Button>
     </>
   );
 };

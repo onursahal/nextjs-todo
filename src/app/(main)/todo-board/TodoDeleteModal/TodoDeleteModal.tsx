@@ -1,4 +1,4 @@
-import { Loader } from "@/components";
+import { Button, Loader } from "@/components";
 import { FC } from "react";
 
 interface TodoDeleteModalProps {
@@ -27,18 +27,20 @@ const TodoDeleteModal: FC<TodoDeleteModalProps> = ({
         <div className="w-full border border-white my-2" />
         <div>Are you sure about to delete "{todoListTitle}" todo list.</div>
         <div className="flex gap-2 self-end">
-          <button
+          <Button
+            intent="danger"
             className="border border-white rounded-md px-2 py-1 mt-4"
             onClick={deleteOnClick}
           >
             {loading ? <Loader /> : "Delete"}
-          </button>
-          <button
+          </Button>
+          <Button
+            intent="primary"
             className="border border-white rounded-md px-2 py-1 mt-4"
             onClick={cancelOnClick}
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </div>
     </div>

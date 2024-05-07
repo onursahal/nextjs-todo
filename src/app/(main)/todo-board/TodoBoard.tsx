@@ -59,7 +59,6 @@ export const TodoBoard = () => {
         desc={(val) => setNewTodos((prev) => ({ ...prev, desc: val }))}
         show={openModal}
       />
-      {/* <button onClick={signOutUser}>Sign Out</button> */}
     </>
   );
 };
