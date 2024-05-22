@@ -51,10 +51,12 @@ const SignIn: FC<{}> = () => {
           onChange={(val) => handleUserState(val, "password")}
         />
       </div>
-      <Button intent={"primary"} className="w-full !mt-8" onClick={signInUser}>
+      <Button intent={"primary"} className="w-full !mt-8 text-sm" onClick={signInUser}>
         {loading ? <Loader /> : "Log in"}
       </Button>
-      <div className="flex place-items-center justify-center self-center text-white text-sm">Or Continue With</div>
+      <div className="flex place-items-center justify-center self-center text-white text-sm">
+        Or Continue With
+      </div>
       <div className="flex justify-center space-x-2">
         <Button intent="transparent">
           <FaGoogle size={32} />
@@ -66,7 +68,7 @@ const SignIn: FC<{}> = () => {
           <FaTwitter size={32} />
         </Button>
       </div>
-      <div className="text-white text-sm">
+      <div className="text-white text-sm self-center">
         Don't have an account yet?{" "}
         <Link href="/sign-up" className="font-bold">
           Sign Up now
