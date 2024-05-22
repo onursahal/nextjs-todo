@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.0.3",
     "@reduxjs/toolkit": "^2.2.3",
     "@tailwindcss/line-clamp": "^0.4.4",
     "class-variance-authority": "^0.7.0",

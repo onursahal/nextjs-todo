@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import buttonStyle from "./Button.style";
 import { VariantProps } from "class-variance-authority";
+import { Button as HeadlessButton } from "@headlessui/react";
 
 interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -16,9 +17,12 @@ const Button: FC<ButtonProps> = ({
   ...props
 }) => {
   return (
-    <button className={buttonStyle({ intent, border, className })} {...props}>
+    <HeadlessButton
+      className={buttonStyle({ intent, border, className })}
+      {...props}
+    >
       {children}
-    </button>
+    </HeadlessButton>
   );
 };
 
